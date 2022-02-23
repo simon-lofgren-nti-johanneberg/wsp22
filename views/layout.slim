@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+html lang="en"
+  head
+    meta charset="UTF-8"/
+    meta name="viewport" content="width=device-width, initial-scale=1.0"/
+    link rel="stylesheet" href="/style.css"/
+    title Workout  
+  body
+  
+  - if session[:id] == nil 
+      nav
+        a href="/" Home
+        a href="/register" Register
+        a href="/login" Login
+  - else 
+      nav
+        a href="/my_exercises_and_workouts" My exercises and workouts
+        a href="/explore" Explore
+        a href="/create_exercise_or_workout" Create exercise or workout
+        a href="/logout" Logout
+  == yield

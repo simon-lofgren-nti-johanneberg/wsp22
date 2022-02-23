@@ -1,0 +1,45 @@
+* {
+  margin: 10px;
+}
+
+body {
+  background-color: rgb(196, 196, 196);
+}
+
+nav {
+  font-family: 'Times New Roman', Times, serif;
+  text-transform: uppercase;
+  text-decoration: none;
+  font-size: 25px;
+  font-weight: bolder;
+  width: 96vw;
+  height: 10vh;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  position: relative;
+  left: 2vw;
+  right: 2vw;
+}
+
+a {
+  text-decoration: none;
+  color: black;
+}
+
+h1 {
+  text-align: center;
+}
+
+.home_headers {
+  text-align: center;
+  text-decoration: none;
+}
+
+h2 {
+  text-decoration: underline;
+}
+
+h3 {
+  font-style: italic;
+}
