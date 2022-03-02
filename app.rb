@@ -60,18 +60,19 @@ end
 get('/my_exercises_and_workouts') do
   db = connection_database('db/workout.db')
   db.results_as_hash = true
-  # @result_workouts = db.execute("SELECT name FROM workouts WHERE user_id = ?", session[:id])
-  @result_exercises = db.execute("SELECT name FROM exercises WHERE user_id = ?", session[:id])
-  # puts "Workouts: #{@result_workouts}"
-  puts "Exercises: #{@result_exercises}"
-  # if result == nil 
-  #   "No workouts yet"
-  # else
-  #   slim(:"exercises_and_workouts/index")
-  # end
+  if session[:choosing_filter] == "all" or session[:choosing_filter] == nil
+    #Detta kan göras bättre med inner join (
+    @result_workouts = db.execute("SELECT name FROM workouts WHERE user_id = ?", session[:id])
+    @result_exercises = db.execute("SELECT name FROM exercises WHERE user_id = ?", session[:id])
+    # )
+  elsif session[:choosing_filter] == "exercises"
+    @result_exercises = db.execute("SELECT name FROM exercises WHERE user_id = ?", session[:id])
+  else
+    @result_workouts = db.execute("SELECT name FROM workouts WHERE user_id = ?", session[:id])
+  end
+  #puts "Workouts: #{@result_workouts}"
+  #puts "Exercises: #{@result_exercises}"
   slim(:"exercises_and_workouts/index")
-  # id = session[:id].to_i
-  # username = session[:username] 
 end
 
 # get('/albums') do
@@ -138,6 +139,21 @@ post('/logout') do
   redirect('/')
 end
 
+post('/filter') do
+  session[:filter] = params["filter"]
+  db = connection_database('db/workout.db')
+  db.results_as_hash = true
+    case session[:filter]
+      when "all"
+        session[:choosing_filter] = "all"
+      when "exercises"
+        session[:choosing_filter] = "exercises"
+      when "workouts"
+        session[:choosing_filter] = "workouts"
+    end
+  redirect('/my_exercises_and_workouts')
+end
 
-#Till nästa gång: Visa upp exercises och workouts
+
+#Till nästa gång: Fixa relationen mellan exercises och muscle groups
 #Till senare: Fixa before do's 

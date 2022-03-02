@@ -1,17 +1,31 @@
 h2 My exercises and workouts 
 
-ol 
-  li 
-    a href="" #{@result_exercises}
+form action="/filter" method="post"
+    select name="filter"
+        option value="all" selected="selected" All
+        option value="exercises"  Exercises
+        option value="workouts"  Workouts
+    input type="submit" value="Filter"
+/
 
+-if @result_exercises == [] && @result_workouts == []
+  h3 No exercises or workouts at the moment, why not create one?
 
+-elsif @result_exercises == nil
+  ol 
+    li 
+      a href="" #{@result_workouts[0]["name"]}
 
+-elsif @result_workouts == nil
+  ol 
+    li
+      a href="" #{@result_exercises[0]["name"]}
 
-/ ol
-/   - albums.each do |album|
-/     li 
-/       a href="albums/#{album['AlbumId']}" #{album["Title"]}
-/       a href="albums/#{album['AlbumId']}/edit" Justera
-/       form method="POST" action="albums/#{album['AlbumId']}/delete"
-/         input type="submit" value="Försvinn"
+-else
+  ol 
+    li 
+      a href="" #{@result_workouts[0]["name"]}
+    li
+      a href="" #{@result_exercises[0]["name"]}
+
 
