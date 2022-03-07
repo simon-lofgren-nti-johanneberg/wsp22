@@ -9,13 +9,13 @@ html lang="en"
   
   - if session[:id] == nil 
       nav
-        a href="/" Home
-        a href="/register" Register
-        a href="/login" Login
+        a href="/" home
+        a href="/register" register
+        a href="/login" login
   - else 
       nav
-        a href="/my_exercises_and_workouts" My exercises and workouts
-        a href="/explore" Explore
-        a href="/create_exercise_or_workout" Create exercise or workout
-        a href="/logout" Logout
+        a href="/exercises_and_workouts" my exercises and workouts
+        a href="/explore" explore
+        a href="/exercises_and_workouts/new" create exercise or workout
+        a href="/logout" logout
   == yield

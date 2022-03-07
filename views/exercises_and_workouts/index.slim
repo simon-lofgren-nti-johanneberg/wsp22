@@ -12,20 +12,37 @@ form action="/filter" method="post"
   h3 No exercises or workouts at the moment, why not create one?
 
 -elsif @result_exercises == nil
-  ol 
-    li 
-      a href="" #{@result_workouts[0]["name"]}
+  ol
+    -@result_workouts.each do |result_workouts|
+      li 
+        a href="" #{result_workouts["name"]}
+        form action="exercises_and_workouts/#{result_workouts["id"]}/delete" method="get"
+          input type="hidden" name="type_element" value="workout"
+          input type="submit" value="Delete"
 
 -elsif @result_workouts == nil
-  ol 
-    li
-      a href="" #{@result_exercises[0]["name"]}
+  ol  
+    -@result_exercises.each do |result_exercises|
+      li
+        a href="" #{result_exercises["name"]}
+        form action="exercises_and_workouts/#{result_exercises["id"]}/delete" method="get"
+          input type="hidden" name="type_element" value="exercise"
+          input type="submit" value="Delete"
 
 -else
-  ol 
-    li 
-      a href="" #{@result_workouts[0]["name"]}
-    li
-      a href="" #{@result_exercises[0]["name"]}
+  ol
+    -@result_workouts.each do |result_workouts|
+      li 
+        a href="" #{result_workouts["name"]}
+        form action="exercises_and_workouts/#{result_workouts["id"]}/delete" method="get"
+          input type="hidden" name="type_element" value="workout"
+          input type="submit" value="Delete"
+
+    -@result_exercises.each do |result_exercises|
+      li
+        a href="" #{result_exercises["name"]}
+        form action="exercises_and_workouts/#{result_exercises["id"]}/delete" method="get"
+          input type="hidden" name="type_element" value="exercise"
+          input type="submit" value="Delete"
 
 
