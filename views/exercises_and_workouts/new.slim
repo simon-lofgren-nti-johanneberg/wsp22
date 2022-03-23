@@ -1,20 +1,14 @@
 -if session[:selected_type] == "exercise"
     form action="/exercises_and_workouts/new" method="post"
-        / a href="/exercises_and_workouts/new" 
-        /     input type="button" value="Back"
-        input type="text" name="title_exercise" placeholder="Title for exercise" 
-        select name="muscle_group" 
-            option value="choose_muscle_group" selected="selected" Select muscle group
-            option value="abs"  Abs
-            option value="lat"  Lat
-            option value="biceps" Biceps
-            option value="triceps" Triceps
-            option value="chest" Chest
-            option value="shoulder" Shoulder
-            option value="leg" Leg
-        / a href="" 
-        /     input type="button" value="Add another muscle group"
-        input type="submit" value="Create exercise" /
+        input type="text" name="title_exercise" placeholder="Title for exercise"
+        input type="submit" value="Create exercise"
+        p Choose muscle group(s):
+        - @muscle_groups.each do |muscle|
+            div
+                label for="#{muscle['type']}" #{muscle['type']}
+                input name="#{muscle['type']}" type="checkbox" 
+            div 
+    /
 
 -elsif session[:selected_type] == "workout" 
     form action="/exercises_and_workouts/new" method="post"

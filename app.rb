@@ -6,18 +6,18 @@ require 'sinatra/reloader'
 
 enable :sessions
 
+#Helpfunctions:
+def connection_database(database) 
+  db = SQLite3::Database.new(database)
+  return db
+end
+
 #Övrig kod 
 before do #INTE KLAR MED DENNA
   if (session[:id] ==  nil) && (request.path_info == '')
     # session[:error] = "You need to log in to see this"
     # redirect('/error')
   end
-end
-
-#Helpfunctions:
-def connection_database(database) 
-  db = SQLite3::Database.new(database)
-  return db
 end
 
 #Routes:
@@ -43,6 +43,10 @@ get('/exercises_and_workouts/:id/delete') do
 end
 
 get('/exercises_and_workouts/new') do
+  db = connection_database('db/workout.db')
+  db.results_as_hash = true
+  @muscle_groups = db.execute("SELECT type FROM muscle_groups")
+  # p @muscle_groups
   slim(:"exercises_and_workouts/new")
 end
 
@@ -161,19 +165,35 @@ post('/exercises_and_workouts/:id/delete') do
 end 
 
 post('/exercises_and_workouts/new') do
-  if session[:selected_type] == "exercise"
-    title_exercise = params[:title_exercise]
-    if title_exercise == ""
-      session[:error_message_new_exercise_or_workout] = "Your title can't be empty"
-      redirect('/exercises_and_workouts/new')
-    end
-    muscle_group = params[:muscle_group]
-    puts muscle_group
-    #Inte klar med denna post route
-  else
+  # p "params: #{params}"
 
+  chosen_muscle_groups = []
+  params.each do |element|
+    # p element
+    chosen_muscle_groups << element[0]
+  end
+  # p "Innan första elementet är borttaget: #{chosen_muscle_groups}"
+  # chosen_muscle_groups.delete_at 0
+  # p "Efter första elementet är borttaget: #{chosen_muscle_groups}"
+  # p "Testar att välja första muskelgruppen: #{chosen_muscle_groups[0]}"
+  # p chosen_muscle_groups[0]
+
+  title_exercise = params[:title_exercise]
+  title_workout = params[:title_workout]
+  if session[:selected_type] == "exercise" && title_exercise != ""
+
+  elsif session[:selected_type] == "workout" && title_workout != ""
+
+  else
+    session[:error_message_new_exercise_or_workout] = "Your title can't be empty"
+    redirect('/exercises_and_workouts/new')
   end
 
+  #Tillfällig redirect:
+  redirect('/exercises_and_workouts/new')
+  #
+  
+  #Inte klar med denna post-route
 end
 
 post('/select_type') do 
@@ -191,5 +211,10 @@ post('/select_type') do
   redirect('/exercises_and_workouts/new')
 end
 
-#Till nästa gång: Lösa så att det går att välja flera alternativ i en och samma select (new.slim rad 6)
+#Till nästa gång: Relationstabell mellan exercises och muscle_groups
 #Till senare: Fixa before do's 
+
+#Istället för en stor del av valideringen, kan kommandot required="required" användas. Det sätts isåfall på samma rad som fälten i forms som måste fyllas i 
+
+
+
