@@ -46,6 +46,7 @@ get('/exercises_and_workouts/new') do
   db = connection_database('db/workout.db')
   db.results_as_hash = true
   @muscle_groups = db.execute("SELECT type FROM muscle_groups")
+  @result_exercises = db.execute("SELECT name FROM exercises WHERE user_id = ?", session[:id])
   # p @muscle_groups
   slim(:"exercises_and_workouts/new")
 end
@@ -158,6 +159,7 @@ post('/exercises_and_workouts/:id/delete') do
   db = connection_database('db/workout.db')
   if session[:type] == "exercise"
     db.execute("DELETE FROM exercises WHERE id = ?",id)
+    db.execute("DELETE FROM relation_exercises_muscle WHERE exercise_id = ?",id)
   else
     db.execute("DELETE FROM workouts WHERE id = ?",id)
   end
@@ -165,23 +167,25 @@ post('/exercises_and_workouts/:id/delete') do
 end 
 
 post('/exercises_and_workouts/new') do
-  # p "params: #{params}"
-
   chosen_muscle_groups = []
   params.each do |element|
-    # p element
+    p element
     chosen_muscle_groups << element[0]
   end
   # p "Innan första elementet är borttaget: #{chosen_muscle_groups}"
-  # chosen_muscle_groups.delete_at 0
+  chosen_muscle_groups.delete_at 0
   # p "Efter första elementet är borttaget: #{chosen_muscle_groups}"
   # p "Testar att välja första muskelgruppen: #{chosen_muscle_groups[0]}"
-  # p chosen_muscle_groups[0]
-
   title_exercise = params[:title_exercise]
   title_workout = params[:title_workout]
   if session[:selected_type] == "exercise" && title_exercise != ""
-
+    db = connection_database('db/workout.db')
+    db.execute("INSERT INTO exercises (name,user_id) VALUES (?,?)",title_exercise,session[:id])
+    exercise_id = db.last_insert_row_id
+    chosen_muscle_groups.each do |muscle|
+      muscle_group_id = db.execute("SELECT id FROM muscle_groups WHERE type = ?",muscle)
+      db.execute("INSERT INTO relation_exercises_muscle (exercise_id,muscle_group_id) VALUES (?,?)",exercise_id,muscle_group_id)
+    end
   elsif session[:selected_type] == "workout" && title_workout != ""
 
   else

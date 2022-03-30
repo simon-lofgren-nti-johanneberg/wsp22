@@ -12,10 +12,14 @@
 
 -elsif session[:selected_type] == "workout" 
     form action="/exercises_and_workouts/new" method="post"
-        / a href="/exercises_and_workouts/new" 
-        /     input type="button" value="Back"
         input type="text" name="title_workout" placeholder="Title for workout" 
-        input type="submit" value="Create workout" /
+        input type="submit" value="Create workout" 
+        - @result_exercises.each do |exercise|
+            div
+                label for="#{exercise['name']}" #{exercise['name']}
+                input name="#{exercise['name']}" type="checkbox" 
+            div 
+    /
 
 -else 
     form action="/select_type" method="post"
