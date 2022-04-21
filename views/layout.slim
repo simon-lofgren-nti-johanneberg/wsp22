@@ -4,18 +4,17 @@ html lang="en"
     meta charset="UTF-8"/
     meta name="viewport" content="width=device-width, initial-scale=1.0"/
     link rel="stylesheet" href="/style.css"/
-    title Workout  
+    title Average Workout Enjoyer  
   body
   
-  - if session[:id] == nil 
-      nav
-        a href="/" home
-        a href="/register" register
-        a href="/login" login
-  - else 
-      nav
-        a href="/exercises_and_workouts" my exercises and workouts
-        a href="/explore" explore
-        a href="/exercises_and_workouts/new" create exercise or workout
-        a href="/logout" logout
+  -if session[:id] == nil 
+    nav
+      a href="/" home
+      a href="/register" register
+      a href="/login" login
+  -else 
+    nav
+      a href="/exercises_workouts/" my exercises and workouts
+      a href="/exercises_workouts/new" create exercise or workout
+      a href="/logout" logout
   == yield

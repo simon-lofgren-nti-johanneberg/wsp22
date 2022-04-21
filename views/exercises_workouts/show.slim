@@ -1,0 +1,13 @@
+h2 About #{@data["type"]}
+p Id: #{@id}
+p Title: #{@data["title"]}
+
+-if @included_muscle_groups != []
+    p class="underline_p_tag" Muscle groups
+    -@included_muscle_groups.each do |muscle|
+        p - #{muscle["label"]}
+
+-if @data["type"] == "workout" && @included_exercises != []
+    p class="underline_p_tag" Included exercises
+    -@included_exercises.each do |exercise|
+        p - #{exercise["title"]}

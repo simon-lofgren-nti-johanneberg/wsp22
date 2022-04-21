@@ -1,0 +1,38 @@
+h3 #{session[:error_edit]}
+
+form action="/filter" method="post"
+    select name="filter"
+        option value="all" selected="selected" All
+        option value="exercise"  Exercises
+        option value="workout"  Workouts
+    input type="submit" value="Filter"
+
+-if @exercises == [] && @workouts == []
+  h3 None of your objects match with chosen filter, try <a id="create" href="/exercises_workouts/new">create
+
+-if @exercises != []
+  h2 Exercises
+  ol
+    -@exercises.each do |element|
+      li
+        a href="#{element["id"]}" #{element["title"]}
+
+        form action="#{element["id"]}/delete" method="get"
+          input type="submit" value="Delete"
+
+        form action="#{element["id"]}/edit" method="get"
+          input type="submit" value="Edit"
+
+-if @workouts != []
+  h2 Workouts
+  ol
+    -@workouts.each do |element|
+      li
+        a href="#{element["id"]}" #{element["title"]}
+
+        form action="#{element["id"]}/delete" method="get"
+          input type="submit" value="Delete"
+
+        form action="#{element["id"]}/edit" method="get"
+          input type="submit" value="Edit"
+

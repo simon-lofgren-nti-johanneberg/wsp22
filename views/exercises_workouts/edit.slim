@@ -1,0 +1,30 @@
+h2 Edit #{session[:type_edit]}
+
+form action="update" method="post"
+    input type="text" name="title" value="#{@title['title']}"
+    input type="hidden" name="old_title" value="#{@title['title']}"
+    input type="submit" value="Edit #{session[:type_edit]}"
+    p class="underline_p_tag" Choose muscle groups
+    -@muscle_groups.each do |muscle|
+        -if @included_muscle_groups.include? (muscle)
+            label for="m#{muscle['label']}" #{muscle['label']}
+            input name="m#{muscle['label']}" type="checkbox" checked="checked"
+        -else 
+            label for="m#{muscle['label']}" #{muscle['label']}
+            input name="m#{muscle['label']}" type="checkbox"
+
+    -if session[:type_edit] == "workout" && @exercises != []
+        p class="underline_p_tag" Include exercises
+        -@exercises.each do |exercise|
+            -if @included_exercises.include? (exercise)
+                div
+                    label for="e#{exercise['title']}" #{exercise['title']}
+                    input name="e#{exercise['title']}" type="checkbox" checked="checked"
+            -else
+                div 
+                    label for="e#{exercise['title']}" #{exercise['title']}
+                    input name="e#{exercise['title']}" type="checkbox" 
+
+
+
+

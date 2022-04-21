@@ -3,82 +3,138 @@ require 'slim'
 require 'sqlite3'
 require 'bcrypt'
 require 'sinatra/reloader'
+require_relative 'model.rb'
 
 enable :sessions
 
-#Helpfunctions:
-def connection_database(database) 
-  db = SQLite3::Database.new(database)
-  return db
+#Helpfunction:
+def destroy_sessions(session1,session2,session3)
+  temp1 = session[session1]
+  temp2 = session[session2]
+  temp3 = session[session3]
+  session.destroy
+  session[session1] = temp1
+  session[session2] = temp2
+  session[session3] = temp3
 end
 
-#Övrig kod 
-before do #INTE KLAR MED DENNA
-  if (session[:id] ==  nil) && (request.path_info == '')
-    # session[:error] = "You need to log in to see this"
-    # redirect('/error')
-  end
-end
+#Before do: 
+before do 
+  #Validering
+  if session[:id] ==  nil && request.path_info != '/' && request.path_info != '/register' && request.path_info != '/login' && request.path_info != '/error'
+    session[:error] = "Error: Not available route"
+    redirect('/error')
+  elsif session[:id] !=  nil && (request.path_info == '/' or request.path_info == '/register' or request.path_info == '/login')
+    session[:error] = "Error: Not available route"
+    redirect('/error') 
+  end 
+  #
+end 
 
 #Routes:
 get('/') do
-  session[:error_message_register] = nil
-  session[:error_message_login] = nil
+  session.destroy
   slim(:home)
 end
 
+get('/error') do 
+  destroy_sessions(:id,:filter,:error)
+  session[:error]
+end
+
 get('/register') do
-  session[:error_message_login] = nil
+  destroy_sessions(:error_register,:error_register,:error_register)
   slim(:register)
 end
 
 get('/login') do
-  session[:error_message_register] = nil
+  destroy_sessions(:error_login,:error_login,:error_login)
   slim(:login)
 end
 
-get('/exercises_and_workouts/:id/delete') do  
-  session[:type] = params[:type_element]
-  slim(:"exercises_and_workouts/delete")
-end
+get('/exercises_workouts/:id/delete') do
+  destroy_sessions(:id,:filter,:filter)
+  id = params[:id]
+  db = connection_database('db/workout.db',true)
+  # p "db: #{db}"
+  # number = function(1)
+  # p "number: #{number}"
+  type = select_with_two_terms(db,"type","exercises_workouts","id","user_id",id,session[:id]).first
 
-get('/exercises_and_workouts/new') do
-  db = connection_database('db/workout.db')
-  db.results_as_hash = true
-  @muscle_groups = db.execute("SELECT type FROM muscle_groups")
-  @result_exercises = db.execute("SELECT name FROM exercises WHERE user_id = ?", session[:id])
-  # p @muscle_groups
-  slim(:"exercises_and_workouts/new")
-end
-
-get('/exercises_and_workouts') do
-  session[:error_message_new_exercise_or_workout] = nil
-  session[:selected_type] = nil
-  db = connection_database('db/workout.db')
-  db.results_as_hash = true
-  if session[:choosing_filter] == "all" or session[:choosing_filter] == nil
-    #Detta kan göras bättre med inner join (
-    @result_workouts = db.execute("SELECT * FROM workouts WHERE user_id = ?", session[:id])
-    @result_exercises = db.execute("SELECT * FROM exercises WHERE user_id = ?", session[:id])
-    # )
-  elsif session[:choosing_filter] == "exercises"
-    @result_exercises = db.execute("SELECT * FROM exercises WHERE user_id = ?", session[:id])
-  else
-    @result_workouts = db.execute("SELECT * FROM workouts WHERE user_id = ?", session[:id])
+  if type == nil 
+    session[:error] = "Error: Unauthorized access"
+    redirect('/error')
   end
-  # puts "Workouts: #{@result_workouts}"
-  # puts "Exercises: #{@result_exercises}"
-  slim(:"exercises_and_workouts/index")
+
+  session[:type_delete] = type["type"]
+  slim(:"exercises_workouts/delete")
 end
 
-# get('/albums') do
-#   db = SQLite3::Database.new("db/chinook-crud.db")
-#   db.results_as_hash = true
-#   result = db.execute("SELECT * FROM albums")
-#   slim(:"albums/index",locals:{albums:result})
-# end
+get('/exercises_workouts/:id/edit') do
+  destroy_sessions(:id,:filter,:filter)
+  id = params[:id]
+  db = connection_database('db/workout.db',true)
+  type = select_with_two_terms(db,"type","exercises_workouts","id","user_id",id,session[:id]).first
+
+  #Validering
+  if type == nil 
+    session[:error] = "Error: Unauthorized access"
+    redirect('/error')
+  end
+  #
+
+  session[:type_edit] = type["type"]
+  @muscle_groups = select_without_term(db,"label","muscle_groups")
+  @exercises = select_with_two_terms(db,"title","exercises_workouts","user_id","type",session[:id],"exercise")
+  @title = select_with_one_term(db,"title","exercises_workouts","id",id).first
+  @included_muscle_groups = select_with_inner_join(db,"label","relation_#{session[:type_edit]}_muscle","muscle_groups","muscle_group_id","id","#{session[:type_edit]}_id",id)
+
+  if session[:type_edit] == "workout" 
+    @included_exercises = select_with_inner_join(db,"title","relation_exercise_workout","exercises_workouts","exercise_id","id","workout_id",id)
+  end
+
+  slim(:"exercises_workouts/edit")
+end
+
+#HÄR
+
+get('/exercises_workouts/new') do
+  destroy_sessions(:id,:error_new,:type_new)
+  db = connection_database('db/workout.db',true)
+  @muscle_groups = select_without_term(db,"label","muscle_groups")
+  @exercises = select_with_two_terms(db,"title","exercises_workouts","user_id","type",session[:id],"exercise")
+  slim(:"exercises_workouts/new")
+end
+
+get('/exercises_workouts/:id') do
+  @id = params[:id]
+  db = connection_database('db/workout.db',true)
+  @data = select_with_one_term(db,"*","exercises_workouts","id",@id).first
+  @included_muscle_groups = select_with_inner_join(db,"label","relation_#{@data["type"]}_muscle","muscle_groups","muscle_group_id","id","#{@data["type"]}_id",@id)
+  p "Included: #{@included_muscle_groups}"
+
+  if @data["type"] == "workout"
+    @included_exercises = select_with_inner_join(db,"title","relation_exercise_workout","exercises_workouts","exercise_id","id","workout_id",@id)
+  end
+
+  slim(:"exercises_workouts/show")
+end
+
+get('/exercises_workouts/') do
+  destroy_sessions(:id,:filter,:error_edit)
+  db = connection_database('db/workout.db',true)
+  @exercises = select_with_two_terms(db,"*","exercises_workouts","user_id","type",session[:id],"exercise")
+  @workouts = select_with_two_terms(db,"*","exercises_workouts","user_id","type",session[:id],"workout")
+  if session[:filter] == "exercise"
+    @workouts = []
+  elsif session[:filter] == "workout"
+    @exercises = []
+  end
+  slim(:"exercises_workouts/index")
+end
 
 get('/logout') do
+  destroy_sessions(:id,:id,:id)
   slim(:logout)
 end
 
@@ -87,24 +143,22 @@ post('/login') do
   password = params[:password]
 
   if username == "" or password == ""
-    session[:error_message_login] = "Your username and/or password can't be empty"
+    session[:error_login] = "Your username and/or password can't be empty"
     redirect('/login')
   else 
-    db = connection_database('db/workout.db')
-    db.results_as_hash = true
-    result = db.execute("SELECT * FROM users WHERE username = ?",username).first
-    if result == nil
-      session[:error_message_login] = "Username does not exist"
+    db = connection_database('db/workout.db',true)
+    user = select_with_one_term(db,"*","users","username",username).first
+    if user == nil
+      session[:error_login] = "Username does not exist"
       redirect('/login')
     else
-      pwdigest = result["pwdigest"]
-      id = result["id"]
-      if BCrypt::Password.new(pwdigest) == password
+      password_digest = user["password_digest"]
+      id = user["id"]
+      if BCrypt::Password.new(password_digest) == password
         session[:id] = id
-        session[:username] = username
-        redirect('/exercises_and_workouts')
+        redirect('/exercises_workouts/')
       else
-        session[:error_message_login] = "Wrong password"
+        session[:error_login] = "Wrong password"
         redirect('/login')
       end
     end
@@ -115,22 +169,21 @@ post('/register') do
   username = params[:username]
   password = params[:password]
   password_confirm = params[:password_confirm]
-  db = connection_database('db/workout.db')
-  result = db.execute("SELECT * FROM users WHERE username = ?",username)
+  db = connection_database('db/workout.db',true)
+  eventual_data = select_with_one_term(db,"*","users","username",username)
   if username == "" or password == "" or password_confirm == ""
-    session[:error_message_register] = "One or more of the boxes are empty"
+    session[:error_register] = "One or more of the boxes are empty"
     redirect('/register')
-  elsif result != []
-    session[:error_message_register] = "Username already taken"
+  elsif eventual_data != []
+    session[:error_register] = "Username already taken"
     redirect('/register')
   else
     if password == password_confirm
       password_digest = BCrypt::Password.create(password)
-      db = SQLite3::Database.new('db/workout.db')
-      db.execute("INSERT INTO users (username,pwdigest) VALUES (?,?)",username,password_digest)
+      insert_to_two_columns(db,"users","username","password_digest",username,password_digest)
       redirect('/login')
     else
-      session[:error_message_register] = "The passwords don't match"
+      session[:error_register] = "The passwords don't match"
       redirect('/register')
     end
   end
@@ -142,81 +195,153 @@ post('/logout') do
 end
 
 post('/filter') do
-  session[:filter] = params[:filter]
-    case session[:filter]
+  destroy_sessions(:id,:id,:filter)
+  filter = params[:filter]
+    case filter
       when "all"
-        session[:choosing_filter] = "all"
-      when "exercises"
-        session[:choosing_filter] = "exercises"
-      when "workouts"
-        session[:choosing_filter] = "workouts"
+        session[:filter] = nil
+      when "exercise"
+        session[:filter] = "exercise"
+      when "workout"
+        session[:filter] = "workout"
     end
-  redirect('/exercises_and_workouts')
+  redirect('/exercises_workouts/')
 end
 
-post('/exercises_and_workouts/:id/delete') do
-  id = params[:id].to_i
-  db = connection_database('db/workout.db')
-  if session[:type] == "exercise"
-    db.execute("DELETE FROM exercises WHERE id = ?",id)
-    db.execute("DELETE FROM relation_exercises_muscle WHERE exercise_id = ?",id)
-  else
-    db.execute("DELETE FROM workouts WHERE id = ?",id)
-  end
-  redirect('/exercises_and_workouts')
+post('/exercises_workouts/:id/delete') do
+  id = params[:id]
+  db = connection_database('db/workout.db',false)
+  delete(db,"exercises_workouts","id",id)
+  delete(db,"relation_#{session[:type_delete]}_muscle","#{session[:type_delete]}_id",id)
+  delete(db,"relation_exercise_workout","#{session[:type_delete]}_id",id) 
+  redirect('/exercises_workouts/')
 end 
 
-post('/exercises_and_workouts/new') do
-  chosen_muscle_groups = []
-  params.each do |element|
-    p element
-    chosen_muscle_groups << element[0]
-  end
-  # p "Innan första elementet är borttaget: #{chosen_muscle_groups}"
-  chosen_muscle_groups.delete_at 0
-  # p "Efter första elementet är borttaget: #{chosen_muscle_groups}"
-  # p "Testar att välja första muskelgruppen: #{chosen_muscle_groups[0]}"
-  title_exercise = params[:title_exercise]
-  title_workout = params[:title_workout]
-  if session[:selected_type] == "exercise" && title_exercise != ""
-    db = connection_database('db/workout.db')
-    db.execute("INSERT INTO exercises (name,user_id) VALUES (?,?)",title_exercise,session[:id])
-    exercise_id = db.last_insert_row_id
-    chosen_muscle_groups.each do |muscle|
-      muscle_group_id = db.execute("SELECT id FROM muscle_groups WHERE type = ?",muscle)
-      db.execute("INSERT INTO relation_exercises_muscle (exercise_id,muscle_group_id) VALUES (?,?)",exercise_id,muscle_group_id)
-    end
-  elsif session[:selected_type] == "workout" && title_workout != ""
-
-  else
-    session[:error_message_new_exercise_or_workout] = "Your title can't be empty"
-    redirect('/exercises_and_workouts/new')
-  end
-
-  #Tillfällig redirect:
-  redirect('/exercises_and_workouts/new')
-  #
+post('/exercises_workouts/:id/update') do
+  title = params[:title].strip
   
-  #Inte klar med denna post-route
+  if title == ""
+    session[:error_edit] = "Error: Title can't be empty"
+    redirect('/exercises_workouts/')
+  end
+
+  id = params[:id]
+  old_title = params[:old_title]
+  chosen_muscle_groups = []
+  chosen_exercises = []
+  db = connection_database('db/workout.db',false)
+
+  # eventual_data = select_with_two_terms(db,"*","exercises_workouts",term1,term2,value1,value2)
+  # p eventual_data
+  eventual_data = select_with_three_terms(db,"*","exercises_workouts","title","user_id","type",title,session[:id],session[:type_edit])
+
+  if eventual_data != [] && title != old_title
+    session[:error_edit] = "Error: Chosen title of #{session[:type_edit]} already exists"
+    redirect('/exercises_workouts/')
+  end
+  session[:error_edit] = nil
+  
+  params.each do |element|
+    if element[0][0, 1] == "m"
+      muscle = element[0][1,element[0].length - 1]
+      chosen_muscle_groups << muscle
+    elsif element[0][0, 1] == "e"
+      exercise = element[0][1,element[0].length - 1]
+      chosen_exercises << exercise
+    end
+  end
+
+  update(db,"exercises_workouts","title","user_id","id",title,session[:id],id)
+  delete(db,"relation_#{session[:type_edit]}_muscle","#{session[:type_edit]}_id",id)
+
+  chosen_muscle_groups.each do |muscle|
+    muscle_group_id = select_with_one_term(db,"id","muscle_groups","label",muscle)
+    insert_to_two_columns(db,"relation_#{session[:type_edit]}_muscle","#{session[:type_edit]}_id","muscle_group_id",id,muscle_group_id)
+  end
+
+  if session[:type_edit] == "workout"
+
+    delete(db,"relation_exercise_workout","workout_id",id) 
+
+    chosen_exercises.each do |exercise|
+      exercise_id = select_with_three_terms(db,"id","exercises_workouts","title","user_id","type",exercise,session[:id],"exercise")
+      insert_to_two_columns(db,"relation_exercise_workout","exercise_id","workout_id",exercise_id,id)
+    end
+
+  end
+
+  redirect('/exercises_workouts/')
 end
 
 post('/select_type') do 
-  type = params[:type]
+  type = params[:type_new]
     case type
       when "select_type"
-        session[:error_message_new_exercise_or_workout] = "You must select a type"
+        session[:error_new] = "You must select a type"
       when "exercise"
-        session[:error_message_new_exercise_or_workout] = nil
-        session[:selected_type] = "exercise"
+        session[:error_new] = nil
+        session[:type_new] = type
       when "workout"
-        session[:error_message_new_exercise_or_workout] = nil
-        session[:selected_type] = "workout"
+        session[:error_new] = nil
+        session[:type_new] = type
     end
-  redirect('/exercises_and_workouts/new')
+  redirect('/exercises_workouts/new')
 end
 
-#Till nästa gång: Relationstabell mellan exercises och muscle_groups
-#Till senare: Fixa before do's 
+post('/exercises_workouts') do
+  title = params[:title].strip
+  chosen_muscle_groups = []
+  chosen_exercises = []
+  db = connection_database('db/workout.db',false)
+
+  if title == ""
+    session[:error_new] = "Your title can't be empty"
+    redirect('/exercises_workouts/new')
+  end
+
+  eventual_data = select_with_three_terms(db,"*","exercises_workouts","title","user_id","type",title,session[:id],session[:type_new])
+
+  if eventual_data != []
+    session[:error_new] = "Chosen title of #{session[:type_new]} already exists"
+    redirect('/exercises_workouts/new')
+  end
+
+  # p "Params: #{params}"
+  params.each do |element|
+
+    if element[0][0, 1] == "m"
+      muscle = element[0][1,element[0].length - 1]
+      chosen_muscle_groups << muscle
+    elsif element[0][0, 1] == "e"
+      exercise = element[0][1,element[0].length - 1]
+      chosen_exercises << exercise
+    end
+
+  end
+
+  insert_to_three_columns(db,"exercises_workouts","title","user_id","type",title,session[:id],session[:type_new])
+  id = db.last_insert_row_id
+
+  chosen_muscle_groups.each do |muscle|
+    muscle_group_id = select_with_one_term(db,"id","muscle_groups","label",muscle)
+    insert_to_two_columns(db,"relation_#{session[:type_new]}_muscle","#{session[:type_new]}_id","muscle_group_id",id,muscle_group_id)
+  end
+
+  if session[:type_new] == "workout"
+
+    chosen_exercises.each do |exercise|
+      exercise_id = select_with_three_terms(db,"id","exercises_workouts","title","user_id","type",exercise,session[:id],"exercise")
+      insert_to_two_columns(db,"relation_exercise_workout","exercise_id","workout_id",exercise_id,id)
+    end
+
+  end
+  
+  redirect('/exercises_workouts/')
+end
+
+#Till nästa gång: Påbörja MVC
+
+#Till senare: Fixa allmän förbättring av kod, Fixa before do's, .....
 
 #Istället för en stor del av valideringen, kan kommandot required="required" användas. Det sätts isåfall på samma rad som fälten i forms som måste fyllas i 
 

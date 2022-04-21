@@ -12,7 +12,7 @@ nav {
   text-decoration: none;
   font-size: 25px;
   font-weight: bolder;
-  width: 96vw;
+  width: 90vw;
   height: 10vh;
   display: flex;
   justify-content: space-around;
@@ -27,10 +27,6 @@ a {
   color: black;
 }
 
-h1 {
-  text-align: center;
-}
-
 h2 {
   text-decoration: underline;
 }
@@ -39,8 +35,16 @@ h3 {
   font-style: italic;
 }
 
+#create {
+  margin: 0;
+  color: blue;
+}
+
+.underline_p_tag {
+  text-decoration: underline;
+}
+
 .home_headers {
   text-align: center;
   text-decoration: none;
 }
-
