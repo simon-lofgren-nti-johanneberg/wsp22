@@ -7,6 +7,8 @@ require_relative 'model.rb'
 
 enable :sessions
 
+include Module
+
 #Helpfunction:
 def destroy_sessions(session1,session2,session3)
   temp1 = session[session1]
@@ -20,7 +22,6 @@ end
 
 #Before do: 
 before do 
-  #Validering
   if session[:id] ==  nil && request.path_info != '/' && request.path_info != '/register' && request.path_info != '/login' && request.path_info != '/error'
     session[:error] = "Error: Not available route"
     redirect('/error')
@@ -28,7 +29,6 @@ before do
     session[:error] = "Error: Not available route"
     redirect('/error') 
   end 
-  #
 end 
 
 #Routes:
@@ -61,10 +61,7 @@ get('/exercises_workouts/:id/delete') do
   # p "number: #{number}"
   type = select_with_two_terms(db,"type","exercises_workouts","id","user_id",id,session[:id]).first
 
-  if type == nil 
-    session[:error] = "Error: Unauthorized access"
-    redirect('/error')
-  end
+  correct_user(type)
 
   session[:type_delete] = type["type"]
   slim(:"exercises_workouts/delete")
@@ -76,12 +73,7 @@ get('/exercises_workouts/:id/edit') do
   db = connection_database('db/workout.db',true)
   type = select_with_two_terms(db,"type","exercises_workouts","id","user_id",id,session[:id]).first
 
-  #Validering
-  if type == nil 
-    session[:error] = "Error: Unauthorized access"
-    redirect('/error')
-  end
-  #
+  correct_user(type)
 
   session[:type_edit] = type["type"]
   @muscle_groups = select_without_term(db,"label","muscle_groups")
@@ -142,27 +134,15 @@ post('/login') do
   username = params[:username]
   password = params[:password]
 
-  if username == "" or password == ""
-    session[:error_login] = "Your username and/or password can't be empty"
-    redirect('/login')
-  else 
-    db = connection_database('db/workout.db',true)
-    user = select_with_one_term(db,"*","users","username",username).first
-    if user == nil
-      session[:error_login] = "Username does not exist"
-      redirect('/login')
-    else
-      password_digest = user["password_digest"]
-      id = user["id"]
-      if BCrypt::Password.new(password_digest) == password
-        session[:id] = id
-        redirect('/exercises_workouts/')
-      else
-        session[:error_login] = "Wrong password"
-        redirect('/login')
-      end
-    end
-  end
+  empty_fields(username,password,:error_login,'/login')
+  db = connection_database('db/workout.db',true)
+  user = select_with_one_term(db,"*","users","username",username).first
+  existing_user(user)
+  password_digest = user["password_digest"]
+  id = user["id"]
+  correct_password(password_digest,password)
+  session[:id] = id
+  redirect('/exercises_workouts/')
 end
 
 post('/register') do
@@ -171,22 +151,12 @@ post('/register') do
   password_confirm = params[:password_confirm]
   db = connection_database('db/workout.db',true)
   eventual_data = select_with_one_term(db,"*","users","username",username)
-  if username == "" or password == "" or password_confirm == ""
-    session[:error_register] = "One or more of the boxes are empty"
-    redirect('/register')
-  elsif eventual_data != []
-    session[:error_register] = "Username already taken"
-    redirect('/register')
-  else
-    if password == password_confirm
-      password_digest = BCrypt::Password.create(password)
-      insert_to_two_columns(db,"users","username","password_digest",username,password_digest)
-      redirect('/login')
-    else
-      session[:error_register] = "The passwords don't match"
-      redirect('/register')
-    end
-  end
+  empty_fields(username,password,:error_register,'/register')
+  available_user(eventual_data)
+  matching_passwords(password,password_confirm)
+  password_digest = crypt_password(password)
+  insert_to_two_columns(db,"users","username","password_digest",username,password_digest)
+  redirect('/login')
 end
 
 post('/logout') do
@@ -219,26 +189,14 @@ end
 
 post('/exercises_workouts/:id/update') do
   title = params[:title].strip
-  
-  if title == ""
-    session[:error_edit] = "Error: Title can't be empty"
-    redirect('/exercises_workouts/')
-  end
-
+  empty_title(title,:error_edit,'/exercises_workouts/')
   id = params[:id]
   old_title = params[:old_title]
   chosen_muscle_groups = []
   chosen_exercises = []
   db = connection_database('db/workout.db',false)
-
-  # eventual_data = select_with_two_terms(db,"*","exercises_workouts",term1,term2,value1,value2)
-  # p eventual_data
   eventual_data = select_with_three_terms(db,"*","exercises_workouts","title","user_id","type",title,session[:id],session[:type_edit])
-
-  if eventual_data != [] && title != old_title
-    session[:error_edit] = "Error: Chosen title of #{session[:type_edit]} already exists"
-    redirect('/exercises_workouts/')
-  end
+  existing_title_edit(eventual_data,title,old_title)
   session[:error_edit] = nil
   
   params.each do |element|
@@ -294,17 +252,9 @@ post('/exercises_workouts') do
   chosen_exercises = []
   db = connection_database('db/workout.db',false)
 
-  if title == ""
-    session[:error_new] = "Your title can't be empty"
-    redirect('/exercises_workouts/new')
-  end
-
+  empty_title(title,:error_new,'/exercises_workouts/new')
   eventual_data = select_with_three_terms(db,"*","exercises_workouts","title","user_id","type",title,session[:id],session[:type_new])
-
-  if eventual_data != []
-    session[:error_new] = "Chosen title of #{session[:type_new]} already exists"
-    redirect('/exercises_workouts/new')
-  end
+  existing_title_new(eventual_data)
 
   # p "Params: #{params}"
   params.each do |element|
