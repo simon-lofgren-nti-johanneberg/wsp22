@@ -267,6 +267,8 @@ end
 # @param [String] :title, Written title of exercise or workout from edit form, removed spaces back and front
 # @param [String] :old_title, Recent used title of selected exercise or workout
 #
+# params.each do |element|: Due to both muscle groups and included exercises are in the same array, they must be seperated in some way when different things are done with them, thereby is an "m" placed before muscle groups and an "e" places before exercises (in the edit form) and that is what is checked here
+#
 # @see Model#empty_title
 # @see Model#connection_database
 # @see Model#select_with_three_terms
@@ -335,6 +337,8 @@ end
 # Attemps to create new exercise or workout, based on selected type from new.slim
 #
 # @param [String] :title, Written title of exercise or workout from new.slim, removed spaces back and front
+#
+# Explanation for 'params.each do |element|' at post('/exercises_workouts/:id/update')
 #
 # @see Model#empty_title
 # @see Model#connection_database

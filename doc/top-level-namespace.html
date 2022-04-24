@@ -1249,6 +1249,8 @@
     
 <p>Attemps to create new exercise or workout, based on selected type from new.slim</p>
 
+<p>Explanation for &#39;params.each do |element|&#39; at post(&#39;/exercises_workouts/:id/update&#39;)</p>
+
 
   </div>
 </div>
@@ -1304,10 +1306,6 @@
       <pre class="lines">
 
 
-348
-349
-350
-351
 352
 353
 354
@@ -1334,10 +1332,14 @@
 375
 376
 377
-378</pre>
+378
+379
+380
+381
+382</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'app.rb', line 348</span>
+      <pre class="code"><span class="info file"># File 'app.rb', line 352</span>
 
 <span class='id identifier rubyid_post'>post</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>/exercises_workouts</span><span class='tstring_end'>&#39;</span></span><span class='rparen'>)</span> <span class='kw'>do</span>
   <span class='id identifier rubyid_title'>title</span> <span class='op'>=</span> <span class='id identifier rubyid_params'>params</span><span class='lbracket'>[</span><span class='symbol'>:title</span><span class='rbracket'>]</span><span class='period'>.</span><span class='id identifier rubyid_strip'>strip</span>
@@ -1471,6 +1473,8 @@
     
 <p>Attemps to update selected exercise or workout and redirects to &#39;/exercises_workouts/&#39;</p>
 
+<p>params.each do |element|: Due to both muscle groups and included exercises are in the same array, they must be seperated in some way when different things are done with them, thereby is an “m” placed before muscle groups and an “e” places before exercises (in the edit form) and that is what is checked here</p>
+
 
   </div>
 </div>
@@ -1560,8 +1564,6 @@
       <pre class="lines">
 
 
-280
-281
 282
 283
 284
@@ -1594,10 +1596,12 @@
 311
 312
 313
-314</pre>
+314
+315
+316</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'app.rb', line 280</span>
+      <pre class="code"><span class="info file"># File 'app.rb', line 282</span>
 
 <span class='id identifier rubyid_post'>post</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>/exercises_workouts/:id/update</span><span class='tstring_end'>&#39;</span></span><span class='rparen'>)</span> <span class='kw'>do</span>
   <span class='id identifier rubyid_id'>id</span> <span class='op'>=</span> <span class='id identifier rubyid_params'>params</span><span class='lbracket'>[</span><span class='symbol'>:id</span><span class='rbracket'>]</span><span class='period'>.</span><span class='id identifier rubyid_to_i'>to_i</span>
@@ -2070,8 +2074,6 @@
       <pre class="lines">
 
 
-320
-321
 322
 323
 324
@@ -2083,10 +2085,12 @@
 330
 331
 332
-333</pre>
+333
+334
+335</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'app.rb', line 320</span>
+      <pre class="code"><span class="info file"># File 'app.rb', line 322</span>
 
 <span class='id identifier rubyid_post'>post</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>/select_type</span><span class='tstring_end'>&#39;</span></span><span class='rparen'>)</span> <span class='kw'>do</span> 
   <span class='id identifier rubyid_type'>type</span> <span class='op'>=</span> <span class='id identifier rubyid_params'>params</span><span class='lbracket'>[</span><span class='symbol'>:type_new</span><span class='rbracket'>]</span>
@@ -2112,7 +2116,7 @@
 </div>
 
       <div id="footer">
-  Generated on Sun Apr 24 16:10:41 2022 by
+  Generated on Sun Apr 24 18:42:56 2022 by
   <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
   0.9.27 (ruby-3.0.2).
 </div>
