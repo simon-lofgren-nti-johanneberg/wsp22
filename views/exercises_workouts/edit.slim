@@ -12,7 +12,6 @@ form action="update" method="post"
         -else 
             label for="m#{muscle['label']}" #{muscle['label']}
             input name="m#{muscle['label']}" type="checkbox"
-
     -if session[:type_edit] == "workout" && @exercises != []
         p class="underline_p_tag" Include exercises
         -@exercises.each do |exercise|

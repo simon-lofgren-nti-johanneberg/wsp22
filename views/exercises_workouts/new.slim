@@ -15,7 +15,6 @@ h2 New #{session[:type_new]}
                 div
                     label for="e#{exercise['title']}" #{exercise['title']}
                     input name="e#{exercise['title']}" type="checkbox"
-
 -else
     form action="/select_type" method="post"
         select name="type_new"
@@ -23,6 +22,5 @@ h2 New #{session[:type_new]}
             option value="exercise"  Exercise
             option value="workout"  Workout
         input type="submit" value="Select"
-
 
 h3 #{session[:error_new]}
