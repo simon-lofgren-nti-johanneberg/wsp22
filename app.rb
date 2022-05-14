@@ -143,8 +143,8 @@ end
 # Displays a create form, based on selected type (exercise or workout) which is made in the connected slim-file (new.slim) if not already done, removes all unrelevant sessions
 #
 # @see Model#set_db
-# @see Model#select_without_term
 # @see Model#select_with_two_terms
+# @see Model#select_without_term
 #
 get('/exercises_workouts/new') do
   set_db()
@@ -222,6 +222,7 @@ end
 # @see Model#select_with_one_term
 # @see Model#existing_user
 # @see Model#correct_password
+# @see Model#banned
 #
 post('/login') do
   set_db()
@@ -310,7 +311,7 @@ post('/filter') do
   redirect('/exercises_workouts/')
 end
 
-# Bans or unbans selected user, depending on current ban status
+# Bans or unbans selected user, depending on current ban status and redirects to '/users/'
 #
 # @param [Integer] :id, ID of selected user to ban or unban
 #
@@ -331,7 +332,7 @@ post('/users/:id/ban') do
   redirect('/users/')
 end
 
-# Deletes selected exercise or workout and all its data
+# Deletes selected exercise or workout and all its data and redirects to '/exercises_workouts/'
 #
 # @param [Integer] :id, ID of selected exercise or workout to delete
 #
@@ -357,11 +358,10 @@ end
 # @see Model#empty_title
 # @see Model#select_with_three_terms
 # @see Model#existing_title
-# @see Model#update
+# @see Model#update_to_two_columns
 # @see Model#delete
 # @see Model#select_with_one_term
 # @see Model#insert_to_two_columns
-# @see Model#select_with_three_terms
 #
 post('/exercises_workouts/:id/update') do
   set_db()
@@ -424,7 +424,7 @@ post('/select_type') do
   redirect('/exercises_workouts/new')
 end
 
-# Attemps to create new exercise or workout, based on selected type from new.slim
+# Attemps to create new exercise or workout, based on selected type from new.slim, redirects to '/exercises_workouts/'
 #
 # @param [String] :title, Written title of exercise or workout from new.slim, removed spaces back and front
 #
@@ -435,7 +435,6 @@ end
 # @see Model#insert_to_three_columns
 # @see Model#select_with_one_term
 # @see Model#insert_to_two_columns
-# @see Model#select_with_three_terms
 #
 post('/exercises_workouts') do
   set_db()

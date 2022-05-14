@@ -1,8 +1,6 @@
 module Model # A way to organize the code of the program, variables and functions
     # Checks if written username includes data in database, thereby knowing if username already exist or not
     #
-    # @return [Boolean]
-    #
     def available_user(eventual_data)
         eventual_data != []
     end
