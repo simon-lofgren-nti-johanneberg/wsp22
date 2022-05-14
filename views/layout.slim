@@ -14,6 +14,8 @@ html lang="en"
       a href="/login" login
   -else 
     nav
+      -if session[:id] == 16
+        a href="/users/" Users
       a href="/exercises_workouts/" my exercises and workouts
       a href="/exercises_workouts/new" create exercise or workout
       a href="/logout" logout

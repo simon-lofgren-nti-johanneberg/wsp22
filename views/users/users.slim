@@ -1,0 +1,11 @@
+ol 
+    -@users.each do |element|
+        li
+            p Username: #{element["username"]}
+            p Id: #{element["id"]}
+
+            form action="#{element["id"]}/ban" method="post"
+                -if element["ban"] == 0
+                    input type="submit" value="Ban"
+                -else
+                    input type="submit" value="Unban"
