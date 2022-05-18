@@ -5,12 +5,6 @@ module Model # A way to organize the code of the program, variables and function
         eventual_data != []
     end
 
-    # Checks if the current user is not admin by comparing id
-    #
-    def available_route(user_id)
-        user_id != 16
-    end
-
     # Checks if a user is banned 
     #
     def banned(ban)
@@ -21,12 +15,6 @@ module Model # A way to organize the code of the program, variables and function
     #
     def correct_password(password_digest,password)
         BCrypt::Password.new(password_digest) != password
-    end
-
-    # The variable type has not got any value if wrong user is in the route, which is why it's value is checked
-    #
-    def correct_user(type)
-        type == nil 
     end
 
     # Crypts the user's written password with help of BCrypt
@@ -79,6 +67,12 @@ module Model # A way to organize the code of the program, variables and function
     def insert_to_three_columns(table,column1,column2,column3,value1,value2,value3)
         @db.execute("INSERT INTO #{table} (#{column1},#{column2},#{column3}) VALUES (?,?,?)",value1,value2,value3)
         return @db.last_insert_row_id
+    end
+
+    # Checks if the current user is not admin by comparing id
+    #
+    def not_admin(user_id)
+        user_id != 16
     end
 
     # Checks if both written passwords in register form match with each other
@@ -144,6 +138,13 @@ module Model # A way to organize the code of the program, variables and function
     #
     def update_to_two_columns(table,column1,column2,term,value1,value2,value3)
         @db.execute("UPDATE #{table} SET (#{column1},#{column2}) = (?,?) WHERE #{term} = ?",value1,value2,value3)
+    end
+
+    # Comparing the owner of the selected type's id with the inlogged user's id 
+    #
+    def wrong_user(id,user_id)
+        owner = select_with_one_term("user_id","exercises_workouts","id",id).first
+        owner == nil or owner["user_id"] != user_id
     end
 
 end

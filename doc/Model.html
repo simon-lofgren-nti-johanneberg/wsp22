@@ -116,30 +116,6 @@
         <li class="public ">
   <span class="summary_signature">
     
-      <a href="#available_route-instance_method" title="#available_route (instance method)">#<strong>available_route</strong>(user_id)  &#x21d2; Object </a>
-    
-
-    
-  </span>
-  
-  
-  
-  
-  
-  
-  
-
-  
-    <span class="summary_desc"><div class='inline'>
-<p>Checks if the current user is not admin by comparing id.</p>
-</div></span>
-  
-</li>
-
-      
-        <li class="public ">
-  <span class="summary_signature">
-    
       <a href="#available_user-instance_method" title="#available_user (instance method)">#<strong>available_user</strong>(eventual_data)  &#x21d2; Object </a>
     
 
@@ -204,30 +180,6 @@
   
     <span class="summary_desc"><div class='inline'>
 <p>Checks if written password is matching to username.</p>
-</div></span>
-  
-</li>
-
-      
-        <li class="public ">
-  <span class="summary_signature">
-    
-      <a href="#correct_user-instance_method" title="#correct_user (instance method)">#<strong>correct_user</strong>(type)  &#x21d2; Object </a>
-    
-
-    
-  </span>
-  
-  
-  
-  
-  
-  
-  
-
-  
-    <span class="summary_desc"><div class='inline'>
-<p>The variable type has not got any value if wrong user is in the route, which is why it&#39;s value is checked.</p>
 </div></span>
   
 </li>
@@ -452,6 +404,30 @@
         <li class="public ">
   <span class="summary_signature">
     
+      <a href="#not_admin-instance_method" title="#not_admin (instance method)">#<strong>not_admin</strong>(user_id)  &#x21d2; Object </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>Checks if the current user is not admin by comparing id.</p>
+</div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
       <a href="#select_with_inner_join-instance_method" title="#select_with_inner_join (instance method)">#<strong>select_with_inner_join</strong>(prime_column, table1, table2, column1, column2, column3, value)  &#x21d2; Hash </a>
     
 
@@ -641,6 +617,30 @@
 </li>
 
       
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#wrong_user-instance_method" title="#wrong_user (instance method)">#<strong>wrong_user</strong>(id, user_id)  &#x21d2; Object </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>Comparing the owner of the selected type&#39;s id with the inlogged user&#39;s id.</p>
+</div></span>
+  
+</li>
+
+      
     </ul>
   
 
@@ -651,50 +651,7 @@
 
     
       <div class="method_details first">
-  <h3 class="signature first" id="available_route-instance_method">
-  
-    #<strong>available_route</strong>(user_id)  &#x21d2; <tt>Object</tt> 
-  
-
-  
-
-  
-</h3><div class="docstring">
-  <div class="discussion">
-    
-<p>Checks if the current user is not admin by comparing id</p>
-
-
-  </div>
-</div>
-<div class="tags">
-  
-
-
-
-</div><table class="source_code">
-  <tr>
-    <td>
-      <pre class="lines">
-
-
-10
-11
-12</pre>
-    </td>
-    <td>
-      <pre class="code"><span class="info file"># File 'model.rb', line 10</span>
-
-<span class='kw'>def</span> <span class='id identifier rubyid_available_route'>available_route</span><span class='lparen'>(</span><span class='id identifier rubyid_user_id'>user_id</span><span class='rparen'>)</span>
-    <span class='id identifier rubyid_user_id'>user_id</span> <span class='op'>!=</span> <span class='int'>16</span>
-<span class='kw'>end</span></pre>
-    </td>
-  </tr>
-</table>
-</div>
-    
-      <div class="method_details ">
-  <h3 class="signature " id="available_user-instance_method">
+  <h3 class="signature first" id="available_user-instance_method">
   
     #<strong>available_user</strong>(eventual_data)  &#x21d2; <tt>Object</tt> 
   
@@ -764,12 +721,12 @@
       <pre class="lines">
 
 
-16
-17
-18</pre>
+10
+11
+12</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'model.rb', line 16</span>
+      <pre class="code"><span class="info file"># File 'model.rb', line 10</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_banned'>banned</span><span class='lparen'>(</span><span class='id identifier rubyid_ban'>ban</span><span class='rparen'>)</span>
     <span class='id identifier rubyid_ban'>ban</span> <span class='op'>==</span> <span class='int'>1</span>
@@ -807,58 +764,15 @@
       <pre class="lines">
 
 
-22
-23
-24</pre>
+16
+17
+18</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'model.rb', line 22</span>
+      <pre class="code"><span class="info file"># File 'model.rb', line 16</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_correct_password'>correct_password</span><span class='lparen'>(</span><span class='id identifier rubyid_password_digest'>password_digest</span><span class='comma'>,</span><span class='id identifier rubyid_password'>password</span><span class='rparen'>)</span>
     <span class='const'>BCrypt</span><span class='op'>::</span><span class='const'>Password</span><span class='period'>.</span><span class='id identifier rubyid_new'>new</span><span class='lparen'>(</span><span class='id identifier rubyid_password_digest'>password_digest</span><span class='rparen'>)</span> <span class='op'>!=</span> <span class='id identifier rubyid_password'>password</span>
-<span class='kw'>end</span></pre>
-    </td>
-  </tr>
-</table>
-</div>
-    
-      <div class="method_details ">
-  <h3 class="signature " id="correct_user-instance_method">
-  
-    #<strong>correct_user</strong>(type)  &#x21d2; <tt>Object</tt> 
-  
-
-  
-
-  
-</h3><div class="docstring">
-  <div class="discussion">
-    
-<p>The variable type has not got any value if wrong user is in the route, which is why it&#39;s value is checked</p>
-
-
-  </div>
-</div>
-<div class="tags">
-  
-
-
-
-</div><table class="source_code">
-  <tr>
-    <td>
-      <pre class="lines">
-
-
-28
-29
-30</pre>
-    </td>
-    <td>
-      <pre class="code"><span class="info file"># File 'model.rb', line 28</span>
-
-<span class='kw'>def</span> <span class='id identifier rubyid_correct_user'>correct_user</span><span class='lparen'>(</span><span class='id identifier rubyid_type'>type</span><span class='rparen'>)</span>
-    <span class='id identifier rubyid_type'>type</span> <span class='op'>==</span> <span class='kw'>nil</span> 
 <span class='kw'>end</span></pre>
     </td>
   </tr>
@@ -893,12 +807,12 @@
       <pre class="lines">
 
 
-34
-35
-36</pre>
+22
+23
+24</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'model.rb', line 34</span>
+      <pre class="code"><span class="info file"># File 'model.rb', line 22</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_crypt_password'>crypt_password</span><span class='lparen'>(</span><span class='id identifier rubyid_password'>password</span><span class='rparen'>)</span>
     <span class='const'>BCrypt</span><span class='op'>::</span><span class='const'>Password</span><span class='period'>.</span><span class='id identifier rubyid_create'>create</span><span class='lparen'>(</span><span class='id identifier rubyid_password'>password</span><span class='rparen'>)</span>
@@ -936,12 +850,12 @@
       <pre class="lines">
 
 
-40
-41
-42</pre>
+28
+29
+30</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'model.rb', line 40</span>
+      <pre class="code"><span class="info file"># File 'model.rb', line 28</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_delete'>delete</span><span class='lparen'>(</span><span class='id identifier rubyid_table'>table</span><span class='comma'>,</span><span class='id identifier rubyid_term'>term</span><span class='comma'>,</span><span class='id identifier rubyid_value'>value</span><span class='rparen'>)</span>
     <span class='ivar'>@db</span><span class='period'>.</span><span class='id identifier rubyid_execute'>execute</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>DELETE FROM </span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_table'>table</span><span class='embexpr_end'>}</span><span class='tstring_content'> WHERE </span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_term'>term</span><span class='embexpr_end'>}</span><span class='tstring_content'> = ?</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span><span class='id identifier rubyid_value'>value</span><span class='rparen'>)</span>
@@ -979,12 +893,12 @@
       <pre class="lines">
 
 
-46
-47
-48</pre>
+34
+35
+36</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'model.rb', line 46</span>
+      <pre class="code"><span class="info file"># File 'model.rb', line 34</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_empty_fields'>empty_fields</span><span class='lparen'>(</span><span class='id identifier rubyid_username'>username</span><span class='comma'>,</span><span class='id identifier rubyid_password'>password</span><span class='rparen'>)</span>
     <span class='id identifier rubyid_username'>username</span> <span class='op'>==</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_end'>&quot;</span></span> <span class='kw'>or</span> <span class='id identifier rubyid_password'>password</span> <span class='op'>==</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_end'>&quot;</span></span>
@@ -1022,12 +936,12 @@
       <pre class="lines">
 
 
-52
-53
-54</pre>
+40
+41
+42</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'model.rb', line 52</span>
+      <pre class="code"><span class="info file"># File 'model.rb', line 40</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_empty_title'>empty_title</span><span class='lparen'>(</span><span class='id identifier rubyid_title'>title</span><span class='rparen'>)</span>
     <span class='id identifier rubyid_title'>title</span> <span class='op'>==</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_end'>&quot;</span></span>
@@ -1065,12 +979,12 @@
       <pre class="lines">
 
 
-58
-59
-60</pre>
+46
+47
+48</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'model.rb', line 58</span>
+      <pre class="code"><span class="info file"># File 'model.rb', line 46</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_existing_title'>existing_title</span><span class='lparen'>(</span><span class='id identifier rubyid_eventual_data'>eventual_data</span><span class='comma'>,</span><span class='id identifier rubyid_title'>title</span><span class='comma'>,</span><span class='id identifier rubyid_old_title'>old_title</span><span class='rparen'>)</span>
     <span class='id identifier rubyid_eventual_data'>eventual_data</span> <span class='op'>!=</span> <span class='lbracket'>[</span><span class='rbracket'>]</span> <span class='op'>&amp;&amp;</span> <span class='id identifier rubyid_title'>title</span> <span class='op'>!=</span> <span class='id identifier rubyid_old_title'>old_title</span>
@@ -1108,12 +1022,12 @@
       <pre class="lines">
 
 
-64
-65
-66</pre>
+52
+53
+54</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'model.rb', line 64</span>
+      <pre class="code"><span class="info file"># File 'model.rb', line 52</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_existing_user'>existing_user</span><span class='lparen'>(</span><span class='id identifier rubyid_user'>user</span><span class='rparen'>)</span>
     <span class='id identifier rubyid_user'>user</span> <span class='op'>==</span> <span class='kw'>nil</span>
@@ -1164,13 +1078,13 @@
       <pre class="lines">
 
 
-79
-80
-81
-82</pre>
+67
+68
+69
+70</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'model.rb', line 79</span>
+      <pre class="code"><span class="info file"># File 'model.rb', line 67</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_insert_to_three_columns'>insert_to_three_columns</span><span class='lparen'>(</span><span class='id identifier rubyid_table'>table</span><span class='comma'>,</span><span class='id identifier rubyid_column1'>column1</span><span class='comma'>,</span><span class='id identifier rubyid_column2'>column2</span><span class='comma'>,</span><span class='id identifier rubyid_column3'>column3</span><span class='comma'>,</span><span class='id identifier rubyid_value1'>value1</span><span class='comma'>,</span><span class='id identifier rubyid_value2'>value2</span><span class='comma'>,</span><span class='id identifier rubyid_value3'>value3</span><span class='rparen'>)</span>
     <span class='ivar'>@db</span><span class='period'>.</span><span class='id identifier rubyid_execute'>execute</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>INSERT INTO </span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_table'>table</span><span class='embexpr_end'>}</span><span class='tstring_content'> (</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_column1'>column1</span><span class='embexpr_end'>}</span><span class='tstring_content'>,</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_column2'>column2</span><span class='embexpr_end'>}</span><span class='tstring_content'>,</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_column3'>column3</span><span class='embexpr_end'>}</span><span class='tstring_content'>) VALUES (?,?,?)</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span><span class='id identifier rubyid_value1'>value1</span><span class='comma'>,</span><span class='id identifier rubyid_value2'>value2</span><span class='comma'>,</span><span class='id identifier rubyid_value3'>value3</span><span class='rparen'>)</span>
@@ -1209,13 +1123,13 @@
       <pre class="lines">
 
 
-70
-71
-72
-73</pre>
+58
+59
+60
+61</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'model.rb', line 70</span>
+      <pre class="code"><span class="info file"># File 'model.rb', line 58</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_insert_to_two_columns'>insert_to_two_columns</span><span class='lparen'>(</span><span class='id identifier rubyid_table'>table</span><span class='comma'>,</span><span class='id identifier rubyid_column1'>column1</span><span class='comma'>,</span><span class='id identifier rubyid_column2'>column2</span><span class='comma'>,</span><span class='id identifier rubyid_value1'>value1</span><span class='comma'>,</span><span class='id identifier rubyid_value2'>value2</span><span class='rparen'>)</span>
     <span class='ivar'>@db</span><span class='period'>.</span><span class='id identifier rubyid_execute'>execute</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>INSERT INTO </span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_table'>table</span><span class='embexpr_end'>}</span><span class='tstring_content'> (</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_column1'>column1</span><span class='embexpr_end'>}</span><span class='tstring_content'>,</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_column2'>column2</span><span class='embexpr_end'>}</span><span class='tstring_content'>) VALUES (?,?)</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span><span class='id identifier rubyid_value1'>value1</span><span class='comma'>,</span><span class='id identifier rubyid_value2'>value2</span><span class='rparen'>)</span>
@@ -1254,15 +1168,58 @@
       <pre class="lines">
 
 
-86
-87
-88</pre>
+80
+81
+82</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'model.rb', line 86</span>
+      <pre class="code"><span class="info file"># File 'model.rb', line 80</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_matching_passwords'>matching_passwords</span><span class='lparen'>(</span><span class='id identifier rubyid_password'>password</span><span class='comma'>,</span><span class='id identifier rubyid_password_confirm'>password_confirm</span><span class='rparen'>)</span>
     <span class='id identifier rubyid_password'>password</span> <span class='op'>!=</span> <span class='id identifier rubyid_password_confirm'>password_confirm</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="not_admin-instance_method">
+  
+    #<strong>not_admin</strong>(user_id)  &#x21d2; <tt>Object</tt> 
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>Checks if the current user is not admin by comparing id</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+74
+75
+76</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'model.rb', line 74</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_not_admin'>not_admin</span><span class='lparen'>(</span><span class='id identifier rubyid_user_id'>user_id</span><span class='rparen'>)</span>
+    <span class='id identifier rubyid_user_id'>user_id</span> <span class='op'>!=</span> <span class='int'>16</span>
 <span class='kw'>end</span></pre>
     </td>
   </tr>
@@ -1315,12 +1272,12 @@
       <pre class="lines">
 
 
-126
-127
-128</pre>
+120
+121
+122</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'model.rb', line 126</span>
+      <pre class="code"><span class="info file"># File 'model.rb', line 120</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_select_with_inner_join'>select_with_inner_join</span><span class='lparen'>(</span><span class='id identifier rubyid_prime_column'>prime_column</span><span class='comma'>,</span><span class='id identifier rubyid_table1'>table1</span><span class='comma'>,</span><span class='id identifier rubyid_table2'>table2</span><span class='comma'>,</span><span class='id identifier rubyid_column1'>column1</span><span class='comma'>,</span><span class='id identifier rubyid_column2'>column2</span><span class='comma'>,</span><span class='id identifier rubyid_column3'>column3</span><span class='comma'>,</span><span class='id identifier rubyid_value'>value</span><span class='rparen'>)</span>
     <span class='kw'>return</span> <span class='ivar'>@db</span><span class='period'>.</span><span class='id identifier rubyid_execute'>execute</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>SELECT </span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_prime_column'>prime_column</span><span class='embexpr_end'>}</span><span class='tstring_content'> FROM </span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_table1'>table1</span><span class='embexpr_end'>}</span><span class='tstring_content'> INNER JOIN </span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_table2'>table2</span><span class='embexpr_end'>}</span><span class='tstring_content'> ON </span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_table1'>table1</span><span class='embexpr_end'>}</span><span class='tstring_content'>.</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_column1'>column1</span><span class='embexpr_end'>}</span><span class='tstring_content'> = </span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_table2'>table2</span><span class='embexpr_end'>}</span><span class='tstring_content'>.</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_column2'>column2</span><span class='embexpr_end'>}</span><span class='tstring_content'> WHERE </span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_table1'>table1</span><span class='embexpr_end'>}</span><span class='tstring_content'>.</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_column3'>column3</span><span class='embexpr_end'>}</span><span class='tstring_content'> = ?</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span><span class='id identifier rubyid_value'>value</span><span class='rparen'>)</span>
@@ -1376,12 +1333,12 @@
       <pre class="lines">
 
 
-102
-103
-104</pre>
+96
+97
+98</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'model.rb', line 102</span>
+      <pre class="code"><span class="info file"># File 'model.rb', line 96</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_select_with_one_term'>select_with_one_term</span><span class='lparen'>(</span><span class='id identifier rubyid_column'>column</span><span class='comma'>,</span><span class='id identifier rubyid_table'>table</span><span class='comma'>,</span><span class='id identifier rubyid_term'>term</span><span class='comma'>,</span><span class='id identifier rubyid_value'>value</span><span class='rparen'>)</span>
     <span class='kw'>return</span> <span class='ivar'>@db</span><span class='period'>.</span><span class='id identifier rubyid_execute'>execute</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>SELECT </span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_column'>column</span><span class='embexpr_end'>}</span><span class='tstring_content'> FROM </span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_table'>table</span><span class='embexpr_end'>}</span><span class='tstring_content'> WHERE </span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_term'>term</span><span class='embexpr_end'>}</span><span class='tstring_content'> = ?</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span><span class='id identifier rubyid_value'>value</span><span class='rparen'>)</span>
@@ -1432,12 +1389,12 @@
       <pre class="lines">
 
 
-118
-119
-120</pre>
+112
+113
+114</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'model.rb', line 118</span>
+      <pre class="code"><span class="info file"># File 'model.rb', line 112</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_select_with_three_terms'>select_with_three_terms</span><span class='lparen'>(</span><span class='id identifier rubyid_column'>column</span><span class='comma'>,</span><span class='id identifier rubyid_table'>table</span><span class='comma'>,</span><span class='id identifier rubyid_term1'>term1</span><span class='comma'>,</span><span class='id identifier rubyid_term2'>term2</span><span class='comma'>,</span><span class='id identifier rubyid_term3'>term3</span><span class='comma'>,</span><span class='id identifier rubyid_value1'>value1</span><span class='comma'>,</span><span class='id identifier rubyid_value2'>value2</span><span class='comma'>,</span><span class='id identifier rubyid_value3'>value3</span><span class='rparen'>)</span>
     <span class='kw'>return</span> <span class='ivar'>@db</span><span class='period'>.</span><span class='id identifier rubyid_execute'>execute</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>SELECT </span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_column'>column</span><span class='embexpr_end'>}</span><span class='tstring_content'> FROM </span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_table'>table</span><span class='embexpr_end'>}</span><span class='tstring_content'> WHERE </span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_term1'>term1</span><span class='embexpr_end'>}</span><span class='tstring_content'> = ? AND </span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_term2'>term2</span><span class='embexpr_end'>}</span><span class='tstring_content'> = ? AND </span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_term3'>term3</span><span class='embexpr_end'>}</span><span class='tstring_content'> = ?</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span><span class='id identifier rubyid_value1'>value1</span><span class='comma'>,</span><span class='id identifier rubyid_value2'>value2</span><span class='comma'>,</span><span class='id identifier rubyid_value3'>value3</span><span class='rparen'>)</span>
@@ -1493,12 +1450,12 @@
       <pre class="lines">
 
 
-110
-111
-112</pre>
+104
+105
+106</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'model.rb', line 110</span>
+      <pre class="code"><span class="info file"># File 'model.rb', line 104</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_select_with_two_terms'>select_with_two_terms</span><span class='lparen'>(</span><span class='id identifier rubyid_column'>column</span><span class='comma'>,</span><span class='id identifier rubyid_table'>table</span><span class='comma'>,</span><span class='id identifier rubyid_term1'>term1</span><span class='comma'>,</span><span class='id identifier rubyid_term2'>term2</span><span class='comma'>,</span><span class='id identifier rubyid_value1'>value1</span><span class='comma'>,</span><span class='id identifier rubyid_value2'>value2</span><span class='rparen'>)</span>
     <span class='kw'>return</span> <span class='ivar'>@db</span><span class='period'>.</span><span class='id identifier rubyid_execute'>execute</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>SELECT </span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_column'>column</span><span class='embexpr_end'>}</span><span class='tstring_content'> FROM </span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_table'>table</span><span class='embexpr_end'>}</span><span class='tstring_content'> WHERE </span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_term1'>term1</span><span class='embexpr_end'>}</span><span class='tstring_content'> = ? AND </span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_term2'>term2</span><span class='embexpr_end'>}</span><span class='tstring_content'> = ?</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span><span class='id identifier rubyid_value1'>value1</span><span class='comma'>,</span><span class='id identifier rubyid_value2'>value2</span><span class='rparen'>)</span>
@@ -1549,12 +1506,12 @@
       <pre class="lines">
 
 
-94
-95
-96</pre>
+88
+89
+90</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'model.rb', line 94</span>
+      <pre class="code"><span class="info file"># File 'model.rb', line 88</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_select_without_term'>select_without_term</span><span class='lparen'>(</span><span class='id identifier rubyid_column'>column</span><span class='comma'>,</span><span class='id identifier rubyid_table'>table</span><span class='rparen'>)</span>
     <span class='kw'>return</span> <span class='ivar'>@db</span><span class='period'>.</span><span class='id identifier rubyid_execute'>execute</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>SELECT </span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_column'>column</span><span class='embexpr_end'>}</span><span class='tstring_content'> FROM </span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_table'>table</span><span class='embexpr_end'>}</span><span class='tstring_end'>&quot;</span></span><span class='rparen'>)</span>
@@ -1592,13 +1549,13 @@
       <pre class="lines">
 
 
-132
-133
-134
-135</pre>
+126
+127
+128
+129</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'model.rb', line 132</span>
+      <pre class="code"><span class="info file"># File 'model.rb', line 126</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_set_db'>set_db</span><span class='lparen'>(</span><span class='rparen'>)</span>
     <span class='ivar'>@db</span> <span class='op'>=</span> <span class='const'>SQLite3</span><span class='op'>::</span><span class='const'>Database</span><span class='period'>.</span><span class='id identifier rubyid_new'>new</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>db/workout.db</span><span class='tstring_end'>&#39;</span></span><span class='rparen'>)</span>
@@ -1637,12 +1594,12 @@
       <pre class="lines">
 
 
-139
-140
-141</pre>
+133
+134
+135</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'model.rb', line 139</span>
+      <pre class="code"><span class="info file"># File 'model.rb', line 133</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_update_to_one_column'>update_to_one_column</span><span class='lparen'>(</span><span class='id identifier rubyid_table'>table</span><span class='comma'>,</span><span class='id identifier rubyid_column1'>column1</span><span class='comma'>,</span><span class='id identifier rubyid_term'>term</span><span class='comma'>,</span><span class='id identifier rubyid_value1'>value1</span><span class='comma'>,</span><span class='id identifier rubyid_value2'>value2</span><span class='rparen'>)</span>
     <span class='ivar'>@db</span><span class='period'>.</span><span class='id identifier rubyid_execute'>execute</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>UPDATE </span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_table'>table</span><span class='embexpr_end'>}</span><span class='tstring_content'> SET </span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_column1'>column1</span><span class='embexpr_end'>}</span><span class='tstring_content'> = ? WHERE </span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_term'>term</span><span class='embexpr_end'>}</span><span class='tstring_content'> = ?</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span><span class='id identifier rubyid_value1'>value1</span><span class='comma'>,</span><span class='id identifier rubyid_value2'>value2</span><span class='rparen'>)</span>
@@ -1680,15 +1637,60 @@
       <pre class="lines">
 
 
+139
+140
+141</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'model.rb', line 139</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_update_to_two_columns'>update_to_two_columns</span><span class='lparen'>(</span><span class='id identifier rubyid_table'>table</span><span class='comma'>,</span><span class='id identifier rubyid_column1'>column1</span><span class='comma'>,</span><span class='id identifier rubyid_column2'>column2</span><span class='comma'>,</span><span class='id identifier rubyid_term'>term</span><span class='comma'>,</span><span class='id identifier rubyid_value1'>value1</span><span class='comma'>,</span><span class='id identifier rubyid_value2'>value2</span><span class='comma'>,</span><span class='id identifier rubyid_value3'>value3</span><span class='rparen'>)</span>
+    <span class='ivar'>@db</span><span class='period'>.</span><span class='id identifier rubyid_execute'>execute</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>UPDATE </span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_table'>table</span><span class='embexpr_end'>}</span><span class='tstring_content'> SET (</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_column1'>column1</span><span class='embexpr_end'>}</span><span class='tstring_content'>,</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_column2'>column2</span><span class='embexpr_end'>}</span><span class='tstring_content'>) = (?,?) WHERE </span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_term'>term</span><span class='embexpr_end'>}</span><span class='tstring_content'> = ?</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span><span class='id identifier rubyid_value1'>value1</span><span class='comma'>,</span><span class='id identifier rubyid_value2'>value2</span><span class='comma'>,</span><span class='id identifier rubyid_value3'>value3</span><span class='rparen'>)</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="wrong_user-instance_method">
+  
+    #<strong>wrong_user</strong>(id, user_id)  &#x21d2; <tt>Object</tt> 
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>Comparing the owner of the selected type&#39;s id with the inlogged user&#39;s id</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
 145
 146
-147</pre>
+147
+148</pre>
     </td>
     <td>
       <pre class="code"><span class="info file"># File 'model.rb', line 145</span>
 
-<span class='kw'>def</span> <span class='id identifier rubyid_update_to_two_columns'>update_to_two_columns</span><span class='lparen'>(</span><span class='id identifier rubyid_table'>table</span><span class='comma'>,</span><span class='id identifier rubyid_column1'>column1</span><span class='comma'>,</span><span class='id identifier rubyid_column2'>column2</span><span class='comma'>,</span><span class='id identifier rubyid_term'>term</span><span class='comma'>,</span><span class='id identifier rubyid_value1'>value1</span><span class='comma'>,</span><span class='id identifier rubyid_value2'>value2</span><span class='comma'>,</span><span class='id identifier rubyid_value3'>value3</span><span class='rparen'>)</span>
-    <span class='ivar'>@db</span><span class='period'>.</span><span class='id identifier rubyid_execute'>execute</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>UPDATE </span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_table'>table</span><span class='embexpr_end'>}</span><span class='tstring_content'> SET (</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_column1'>column1</span><span class='embexpr_end'>}</span><span class='tstring_content'>,</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_column2'>column2</span><span class='embexpr_end'>}</span><span class='tstring_content'>) = (?,?) WHERE </span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_term'>term</span><span class='embexpr_end'>}</span><span class='tstring_content'> = ?</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span><span class='id identifier rubyid_value1'>value1</span><span class='comma'>,</span><span class='id identifier rubyid_value2'>value2</span><span class='comma'>,</span><span class='id identifier rubyid_value3'>value3</span><span class='rparen'>)</span>
+<span class='kw'>def</span> <span class='id identifier rubyid_wrong_user'>wrong_user</span><span class='lparen'>(</span><span class='id identifier rubyid_id'>id</span><span class='comma'>,</span><span class='id identifier rubyid_user_id'>user_id</span><span class='rparen'>)</span>
+    <span class='id identifier rubyid_owner'>owner</span> <span class='op'>=</span> <span class='id identifier rubyid_select_with_one_term'><span class='object_link'><a href="#select_with_one_term-instance_method" title="Model#select_with_one_term (method)">select_with_one_term</a></span></span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>user_id</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>exercises_workouts</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>id</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span><span class='id identifier rubyid_id'>id</span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_first'>first</span>
+    <span class='id identifier rubyid_owner'>owner</span> <span class='op'>==</span> <span class='kw'>nil</span> <span class='kw'>or</span> <span class='id identifier rubyid_owner'>owner</span><span class='lbracket'>[</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>user_id</span><span class='tstring_end'>&quot;</span></span><span class='rbracket'>]</span> <span class='op'>!=</span> <span class='id identifier rubyid_user_id'>user_id</span>
 <span class='kw'>end</span></pre>
     </td>
   </tr>
@@ -1700,7 +1702,7 @@
 </div>
 
       <div id="footer">
-  Generated on Sat May 14 19:51:28 2022 by
+  Generated on Wed May 18 18:32:46 2022 by
   <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
   0.9.27 (ruby-3.0.2).
 </div>

@@ -62,7 +62,7 @@ end
 # Displays a list of all users (only available for admin), removes all unrelevant sessions as well as a form button to ban or unban users
 #
 # @see Model#set_db
-# @see Model#available_route
+# @see Model#not_admin
 # @see Model#select_with_one_term
 #
 get('/users/') do
@@ -70,15 +70,13 @@ get('/users/') do
   temp1 = session[:id]
   session.destroy
   session[:id] = temp1 
-  if available_route(session[:id])
-    session[:error] = "Error: Not available route"
+  if not_admin(session[:id])
+    session[:error] = "Error: Unauthorized access"
     redirect('/error') 
   end
   @users = select_with_one_term("*","users","role","user")
   slim(:"users/users")
 end
-
-#HÄR, har en hel del kvar, ska fixa post routes från users.slim men även kommentera routen ovan. Dessutom är available_route(user_id) inte kommenterad i model.rb. 
 
 # Displays a form to confirm delete, removes all unrelevant sessions
 #
@@ -86,7 +84,7 @@ end
 #
 # @see Model#set_db
 # @see Model#select_with_two_terms
-# @see Model#correct_user
+# @see Model#wrong_user
 #
 get('/exercises_workouts/:id/delete') do
   set_db()
@@ -97,7 +95,7 @@ get('/exercises_workouts/:id/delete') do
   session[:filter] = temp2
   id = params[:id].to_i
   type = select_with_two_terms("type","exercises_workouts","id","user_id",id,session[:id]).first
-  if correct_user(type)
+  if wrong_user(id,session[:id])
     session[:error] = "Error: Unauthorized access"
     redirect('/error')
   end
@@ -110,8 +108,8 @@ end
 # @param [Integer] :id, ID of selected exercise or workout to edit
 #
 # @see Model#set_db
+# @see Model#wrong_user
 # @see Model#select_with_two_terms
-# @see Model#correct_user
 # @see Model#select_without_term
 # @see Model#select_with_one_term
 # @see Model#select_with_inner_join
@@ -124,11 +122,11 @@ get('/exercises_workouts/:id/edit') do
   session[:id] = temp1 
   session[:filter] = temp2
   id = params[:id].to_i
-  type = select_with_two_terms("type","exercises_workouts","id","user_id",id,session[:id]).first
-  if correct_user(type)
+  if wrong_user(id,session[:id])
     session[:error] = "Error: Unauthorized access"
     redirect('/error')
   end
+  type = select_with_two_terms("type","exercises_workouts","id","user_id",id,session[:id]).first
   session[:type_edit] = type["type"]
   @muscle_groups = select_without_term("label","muscle_groups")
   @exercises = select_with_two_terms("title","exercises_workouts","user_id","type",session[:id],"exercise")
@@ -316,11 +314,16 @@ end
 # @param [Integer] :id, ID of selected user to ban or unban
 #
 # @see Model#set_db
+# @see Model#not_admin
 # @see Model#select_with_one_term
 # @see Model#update_to_one_column
 #
 post('/users/:id/ban') do
   set_db()
+  if not_admin(session[:id])
+    session[:error] = "Error: Unauthorized access"
+    redirect('/error') 
+  end
   id = params[:id]
   ban = select_with_one_term("ban","users","id",id).first
   if ban["ban"] == 0 
@@ -337,11 +340,16 @@ end
 # @param [Integer] :id, ID of selected exercise or workout to delete
 #
 # @see Model#set_db
+# @see Model#wrong_user
 # @see Model#delete
 #
 post('/exercises_workouts/:id/delete') do
   set_db()
   id = params[:id].to_i
+  if wrong_user(id,session[:id])
+    session[:error] = "Error: Unauthorized access"
+    redirect('/error')
+  end
   delete("exercises_workouts","id",id)
   delete("relation_#{session[:type_delete]}_muscle","#{session[:type_delete]}_id",id)
   delete("relation_exercise_workout","#{session[:type_delete]}_id",id) 
@@ -355,6 +363,7 @@ end
 # @param [String] :old_title, Recent used title of selected exercise or workout
 #
 # @see Model#set_db
+# @see Model#wrong_user
 # @see Model#empty_title
 # @see Model#select_with_three_terms
 # @see Model#existing_title
@@ -366,6 +375,10 @@ end
 post('/exercises_workouts/:id/update') do
   set_db()
   id = params[:id].to_i
+  if wrong_user(id,session[:id])
+    session[:error] = "Error: Unauthorized access"
+    redirect('/error')
+  end
   title = params[:title].strip
   old_title = params[:old_title]
   chosen_muscle_groups = []
